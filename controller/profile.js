@@ -61,6 +61,10 @@ const logInController = async (req, res) => {
             return res.status(400).json({ message: 'Email and password are required' });
         }
 
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({ message: 'Server configuration error: JWT_SECRET missing' });
+        }
+
         const user = await userSchema.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
