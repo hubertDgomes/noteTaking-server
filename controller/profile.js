@@ -49,6 +49,7 @@ const signUpController = async (req, res) => {
             }
         });
     } catch (err) {
+        console.error('LOGIN_ERROR:', err);
         return res.status(500).json({ message: err.message });
     }
 };

@@ -42,9 +42,17 @@ app.use('/api', noteRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', postRoutes);
 
-dbConnector();
+const start = async () => {
+  try {
+    await dbConnector();
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`The server is working on port ${PORT}!`);
+    });
+  } catch (err) {
+    console.error('Failed to start server:', err.message);
+    process.exit(1);
+  }
+};
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`The server is working on port ${PORT}!`);
-});
+start();
