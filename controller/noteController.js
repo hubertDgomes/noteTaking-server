@@ -77,10 +77,8 @@ const getAllNotes = async (req, res) => {
             return res.status(403).json({ message: "Admin access required" });
         }
 
-        // Get total count for pagination metadata
         const total = await noteSchema.countDocuments();
 
-        // Fetch paginated notes - uses index { createdAt: -1 }
         const notes = await noteSchema
             .find()
             .sort({ createdAt: -1 })
@@ -103,8 +101,6 @@ const getAllNotes = async (req, res) => {
     }
 };
 
-// ==================== GET SINGLE NOTE ====================
-// User gets their own note OR Admin gets any note
 const getNote = async (req, res) => {
     const { noteId } = req.params;
     const userId = req.user.id;
@@ -117,7 +113,6 @@ const getNote = async (req, res) => {
             return res.status(404).json({ message: "Note not found" });
         }
 
-        // Authorization: User can only view their own notes, Admin can view all
         if (userRole !== 'admin' && note.owner._id.toString() !== userId) {
             return res.status(403).json({ message: "Access denied" });
         }
@@ -174,7 +169,6 @@ const deleteNote = async (req, res) => {
             return res.status(404).json({ message: "Note not found" });
         }
 
-        // Authorization: Only owner can delete their note
         if (note.owner.toString() !== userId) {
             return res.status(403).json({ message: "You can only delete your own notes" });
         }
